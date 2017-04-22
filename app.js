@@ -1,26 +1,25 @@
-var fs = require('fs');
-var http = require('http');
+var express = require('express');
 
-var server = http.createServer(function(req,res){ //req - readble stream, res- writable stream
-  console.log('received -'+req.url);
-  if(req.url=="/" || req.url=="/home"){
-    res.writeHead(200,{'Content-Type':'text/html'});
-    fs.createReadStream(__dirname + '/home.html','utf8').pipe(res);
+var app = express();
+app.set('view engine','ejs');
+//routes
+app.get('/',function(req,res){
+  res.send('hello from express')
+});
+app.get('/home',function(req,res){
+  res.render('home.ejs')
+});
+app.get('/profile/:name',function(req,res){
+  var data = {
+    age : 23,
+    location : 'UK',
+    interests : ['AWS','Spring','NodeJs','API','Micro Services']
   }
-  if(req.url=="/api"){
-    res.writeHead(200,{'Content-Type':'application/json'});
-    var jsonObj = {
-      "name": "pepa",
-      "wish" : "to roam in car"
-    }
-    res.end(JSON.stringify(jsonObj));
-  }
-  else {
-    res.writeHead(200,{'Content-Type':'text/html'});
-    fs.createReadStream(__dirname + '/404.html','utf8').pipe(res);
-  }
+  res.render('profile.ejs',{name:req.params.name,profile:data});
+});
+app.get('/accounts/:id',function(req,res){
+  res.send('Outstanding Balanace for account Id-'+req.params.id+' is $1000.00');
+});
 
-}
-);
-server.listen(8080,'127.0.0.1');
-console.log('routing server is listening on port 8080');
+//listening
+app.listen(8080);

@@ -1,0 +1,19 @@
+<html>
+<head>
+<style>
+li {font-size: 20px;text-align: left;color: blue;}
+</style>
+</head>
+<body>
+  <% include partials/nav.ejs%>
+  <h1>Profile Page</h1>
+  <p>Welcome back <%=name%></p>
+  <p>Age <%=profile.age%></p>
+  <p>Location <%=profile.location%></p>
+  <ul>
+    <% profile.interests.forEach(function(item){ %>
+      <li><%=item%></li>
+    <%});%>
+  </ul>
+</body>
+</html>
